@@ -19,6 +19,6 @@ class TestCleaningRobot(TestCase):
     @patch.object(GPIO, "output")
     def test_manage_cleaning_system_greater_than_10(self, mock: Mock, mock_ibs: Mock):
         system = CleaningRobot()
-        system.manage_cleaning_system()
         mock_ibs.return_value = 11
+        system.manage_cleaning_system()
         mock.assert_has_calls([call(system.RECHARGE_LED_PIN, GPIO.LOW), call(system.CLEANING_SYSTEM_PIN, GPIO.HIGH)])
