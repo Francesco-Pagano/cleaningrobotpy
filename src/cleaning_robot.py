@@ -74,6 +74,8 @@ class CleaningRobot:
 
     def execute_command(self, command: str) -> str:
         if command == self.FORWARD:
+            if self.obstacle_found():
+                return f"{self.robot_status()}(0,1)"
             self.activate_wheel_motor()
             if self.heading == self.N:
                 self.pos_y += 1
@@ -109,8 +111,8 @@ class CleaningRobot:
             raise CleaningRobotError
 
     def obstacle_found(self) -> bool:
-        # To be implemented
-        pass
+        return GPIO.input(self.INFRARED_PIN)
+
 
     def manage_cleaning_system(self) -> None:
         charge = self.ibs.get_charge_left()
