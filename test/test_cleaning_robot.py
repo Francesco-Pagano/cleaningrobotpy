@@ -42,3 +42,9 @@ class TestCleaningRobot(TestCase):
         system.initialize_robot()
         system.execute_command(system.RIGHT)
         self.assertEqual(system.robot_status(), "(0,0,E)")
+
+    def test_move_left(self):
+        system = CleaningRobot()
+        system.initialize_robot()
+        system.execute_command(system.LEFT)
+        self.assertEqual(system.robot_status(), "(0,0,W)")
