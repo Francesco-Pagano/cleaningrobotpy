@@ -31,3 +31,8 @@ class TestCleaningRobot(TestCase):
         system.manage_cleaning_system()
         mock.assert_has_calls([call(system.RECHARGE_LED_PIN, GPIO.HIGH), call(system.CLEANING_SYSTEM_PIN, GPIO.LOW)])
 
+    def test_move_forward(self):
+        system = CleaningRobot()
+        system.initialize_robot()
+        system.execute_command(system.FORWARD)
+        self.assertEqual(system.robot_status(), "(0,1,N)")
