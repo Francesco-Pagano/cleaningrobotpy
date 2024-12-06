@@ -5,7 +5,7 @@ from defer import return_value
 
 from mock import GPIO
 from mock.ibs import IBS
-from src.cleaning_robot import CleaningRobot
+from src.cleaning_robot import CleaningRobot, CleaningRobotError
 
 
 class TestCleaningRobot(TestCase):
@@ -48,3 +48,8 @@ class TestCleaningRobot(TestCase):
         system.initialize_robot()
         system.execute_command(system.LEFT)
         self.assertEqual(system.robot_status(), "(0,0,W)")
+
+    def test_not_move(self):
+        system = CleaningRobot()
+        system.initialize_robot()
+        self.assertRaises(CleaningRobotError, system.execute_command, "X")
