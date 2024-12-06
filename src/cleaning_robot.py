@@ -74,6 +74,7 @@ class CleaningRobot:
 
     def execute_command(self, command: str) -> str:
         if command == self.FORWARD:
+            self.activate_wheel_motor()
             self.pos_y += 1
 
 
