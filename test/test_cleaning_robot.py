@@ -84,9 +84,13 @@ class TestCleaningRobot(TestCase):
 
     @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "change_servo_angle")
-    def test_grab_object(self, mock_servo: Mock, mock_ibs: Mock):
+    @patch.object(GPIO, "input")
+    def test_grab_object(self, mock_infrared: Mock, mock_servo: Mock, mock_ibs: Mock):
         system = CleaningRobot()
         mock_ibs.return_value = 20
-        mock_servo.assert_called_with(12)
+        mock_infrared.return_value = True
         system.initialize_robot()
+        system.execute_command(system.FORWARD)
+        mock_servo.assert_called_with(12)
         self.assertTrue(system.close_arm)
+

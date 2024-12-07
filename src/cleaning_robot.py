@@ -39,6 +39,8 @@ class CleaningRobot:
     RIGHT = 'r'
     FORWARD = 'f'
 
+    SERVO_PIN = 17
+
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
@@ -63,6 +65,12 @@ class CleaningRobot:
 
         self.recharge_led_on = False
         self.cleaning_system_on = False
+
+        self.servo = GPIO.PWM(self.SERVO_PIN, 50)
+        self.servo.start(2)
+        time.sleep(1)
+        self.servo.ChangeDutyCycle(0)
+        self.arm_close = False
 
     def initialize_robot(self) -> None:
         self.pos_x = 0
@@ -94,6 +102,7 @@ class CleaningRobot:
                     obstacle_x -= 1
                 elif self.heading == self.S:
                     obstacle_y -= 1
+                self.close_arm()
                 return f"{self.robot_status()}({obstacle_x},{obstacle_y})"
 
             self.activate_wheel_motor()
@@ -192,6 +201,19 @@ class CleaningRobot:
         GPIO.output(self.BIN2, GPIO.LOW)
         GPIO.output(self.PWMB, GPIO.LOW)
         GPIO.output(self.STBY, GPIO.LOW)
+
+    def change_servo_angle(self, duty_cycle):
+        """
+        Changes the servo motor's angle by passing it the corresponding PWM duty cycle
+        :param duty_cycle: the PWM duty cycle (it's a percentage value)
+        """
+        self.servo.ChangeDutyCycle(duty_cycle)
+        time.sleep(1)
+        self.servo.ChangeDutyCycle(0)
+
+    def close_arm(self) -> None:
+        self.change_servo_angle(12)
+        self.arm_close = True
 
 
 class CleaningRobotError(Exception):
