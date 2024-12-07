@@ -76,6 +76,13 @@ class CleaningRobot:
         obstacle_x = self.pos_x
         obstacle_y = self.pos_y
 
+        if self.ibs.get_charge_left() < 10:
+            GPIO.output(self.RECHARGE_LED_PIN, GPIO.HIGH)
+            GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.LOW)
+            self.cleaning_system_on = False
+            self.recharge_led_on = True
+            return "!"+self.robot_status()
+
         if command == self.FORWARD:
             if self.obstacle_found():
 
