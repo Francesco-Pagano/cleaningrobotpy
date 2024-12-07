@@ -81,3 +81,12 @@ class TestCleaningRobot(TestCase):
         system.heading = system.N
         system.manage_cleaning_system()
         self.assertEqual(system.execute_command(system.FORWARD),"!(1,1,N)")
+
+    @patch.object(IBS, "get_charge_left")
+    @patch.object(CleaningRobot, "change_servo_angle")
+    def test_grab_object(self, mock_servo: Mock, mock_ibs: Mock):
+        system = CleaningRobot()
+        mock_ibs.return_value = 20
+        mock_servo.assert_called_with(12)
+        system.initialize_robot()
+        self.assertTrue(system.close_arm)
